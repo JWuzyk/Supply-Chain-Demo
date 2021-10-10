@@ -1,0 +1,8 @@
+streamlit
+ortools
+pydantic
+pandas
+altair
+coverage
+mypy
+flake8
