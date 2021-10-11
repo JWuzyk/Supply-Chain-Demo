@@ -47,7 +47,6 @@ class Problem:
 
     def add_machine(self, machine: Machine) -> bool:
         if machine in self.machines:
-            print("Machine already added")
             return False
 
         self.machines.add(machine)
@@ -182,7 +181,6 @@ class Display:
         for name, machine_schedule in solution.items():
             for task in machine_schedule:
                 task_list.append({"machine": name, "start": task.start, "end": task.end, "job_id": task.job_id})
-        print(task_list)
         return alt.Chart(pd.DataFrame(task_list)).mark_bar().encode(
             x='start',
             x2='end',
