@@ -300,7 +300,7 @@ class JobSchedulerScreen(Screen):
 
     def __init__(self):
         self.problem = Problem(set(), [])
-        self.available_solvers = {"SAT": ORToolsSolver(), "Naive": NaiveSolver()}
+        self.available_solvers = {"ORTools": ORToolsSolver(), "Naive": NaiveSolver()}
         self.solver = NaiveSolver()
         self.job_creator = JobCreator()
 
