@@ -6,3 +6,5 @@ altair
 coverage
 mypy
 flake8
+mip
+graphviz
