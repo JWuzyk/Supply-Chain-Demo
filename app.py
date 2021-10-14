@@ -8,32 +8,33 @@ class EmptyScreen:
 
 try:
     from scheduling_app import JobSchedulerScreen
-except:
+except Exception as e:
     JobSchedulerScreen = EmptyScreen
+    print(f"Failed to import: JobSchedulerScreen - {e}")
 
 try:
     from forecasting_app import ForecastScreen
-except:
+except Exception as e:
     ForecastScreen = EmptyScreen
-    print("Failed to import:")
+    print(f"Failed to import: ForecastScreen - {e}")
 
 try:
     from planning_app import PlanningScreen
-except:
+except Exception as e:
     PlanningScreen = EmptyScreen
-    print("Failed to import:")
+    print(f"Failed to import: PlanningScreen - {e}")
 
 try:
     from routing_app import RoutingScreen
-except:
+except Exception as e:
     RoutingScreen = EmptyScreen
-    print("Failed to import:")
+    print(f"Failed to import: RoutingScreen - {e}")
 
 try:
-    JobSchedulerScreen = EmptyScreen
     from queue_app import QueueScreen
-except:
-    print("Failed to import:")
+except Exception as e:
+    QueueScreen = EmptyScreen
+    print(f"Failed to import: QueueScreen - {e}")
 
 screens = {
     "Scheduling": JobSchedulerScreen,
