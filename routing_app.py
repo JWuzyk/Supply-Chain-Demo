@@ -1,6 +1,8 @@
 
 import streamlit as st
 import requests
+# USE CASEE: https://docs.google.com/presentation/d/1vvVQSdF_DlcZ96Vc6VwOv9ThymAJDl-EdwpJyXmN6_k/edit#slide=id.g70c5cdde8d_0_22
+
 from typing import Tuple, List
 import json
 import pandas as pd
@@ -12,7 +14,6 @@ from pydantic.dataclasses import dataclass
 from typing import List
 
 MAPQUEST_KEY = "TZt5RVTQrGVrcN4GW18QCGA5plt6h6No"
-
 
 #------------------------------------------Variables------------------------------------------------------
 Coordinate = Tuple[float,float]  # latitude, longitude
@@ -268,6 +269,14 @@ class RoutingScreen:
         self.num_vehicles = 2
 
     def show(self):
+        st.markdown(
+        """
+        Scenario: Routing
+
+        A team of salesmen need to vist a collection of potential clients. These clients are spread out around belgium. 
+        We need to find an optimal way to route the sales people so that they can visit all the clients while wasting the minimal amount of time driving
+        """
+        )
         input_col, map_col = st.columns(2)
 
         with input_col:
@@ -318,24 +327,6 @@ class RoutingScreen:
     def get_solution(self):
         return ORToolsSolver().solve(self.prepare_problem())
 
-# @dataclass
-# class Problem:
-#     distance_matrix: List[List[int]]
-#     num_locations: int
-#     num_vehicles: int
-#     depot: int
-
-# @dataclass
-# class Solution:
-#     vehicle_to_locations: List[List[int]]
-
-# class ORToolsSolver:
-
-#     def solver(self , problem: Problem) -> Solution:
-        
-
-
-
 
 def init_state():
     if "screen" not in st.session_state:
@@ -344,12 +335,7 @@ def init_state():
 
 if __name__ == "__main__":
     st.set_page_config(layout="wide")
-    """
-    Scenario: Routing
 
-    A team of salesmen need to vist a collection of potential clients. These clients are spread out around belgium. 
-    We need to find an optimal way to route the sales people so that they can visit all the clients while wasting the minimal amount of time driving
-    """
 
     init_state()
     st.session_state.screen.show()

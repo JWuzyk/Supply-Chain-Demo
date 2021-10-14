@@ -1,0 +1,25 @@
+name: supply-chain-demo
+channels:
+  - conda-forge
+dependencies:
+- pip
+- streamlit
+- pydantic
+- pandas
+- altair
+- coverage
+- mypy
+- flake8
+- simpy
+- pymc3
+- pystan==2.19.1.1
+- prophet
+- theano-pymc 
+- mkl 
+- mkl-service
+- pip:
+  - mip
+  - ortools
+  - graphviz
+
+

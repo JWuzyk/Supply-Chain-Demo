@@ -1,6 +1,5 @@
 /.mypy_cache
 /.vscode
 /__pycache__
-/queue_app.py
 /test.py
 /test2.py

@@ -345,10 +345,13 @@ class SolutionDisplay:
         solution = self.get_solution()
         problem = self.get_problem()
         sol_df = self.schedules_to_df(solution)
-        chart = self.generate_chart(sol_df)
-    
+        prod_chart = self.generate_prod_chart(sol_df)
+        hold_chart = self.generate_hold_chart(sol_df)
+
         st.markdown(f"Optimized Cost {solution.cost}")
-        st.altair_chart(chart)
+        st.altair_chart(prod_chart)
+        st.altair_chart(hold_chart)
+
 
     def get_solution(self) -> Solution:
         return st.session_state.screen.get_solution()
@@ -357,7 +360,7 @@ class SolutionDisplay:
         return st.session_state.screen.get_problem()
 
     @staticmethod
-    def generate_chart(df):
+    def generate_prod_chart(df):
         df = df[df["Type"] == "Production"]
         chart = alt.Chart(df).mark_bar().encode(
             x='Time:O',
@@ -369,6 +372,23 @@ class SolutionDisplay:
             facet=alt.Facet('Facility', columns=5),
         ).properties(
             title='Optimized Production Schedules',
+            width=400
+        )
+        return chart
+
+    @staticmethod
+    def generate_hold_chart(df):
+        df = df[df["Type"] == "Holding"]
+        chart = alt.Chart(df).mark_bar().encode(
+            x='Time:O',
+            y=alt.Y(
+                'Amount',
+                title='Amount to produce',
+                axis=alt.Axis(format='~s')
+            ),
+            facet=alt.Facet('Facility', columns=5),
+        ).properties(
+            title='Holding Schedules',
             width=400
         )
         return chart
@@ -394,6 +414,11 @@ class PlanningScreen:
         self.problem = parse_json(self.setup)
 
     def show(self):
+        st.markdown(
+        """
+        Scenario: Production Planning
+        """
+        )
         graph_col, order_col, setting_col = st.columns(3)
 
         with graph_col:
@@ -431,13 +456,7 @@ def init_state():
 
 if __name__ == '__main__':
     st.set_page_config(layout="wide")
-    """
-    A product has various components which need to be produced to create the final product.
 
-    This app takes in a list of orders [product + deadline] + some setup json (Production Facilities, Available Products, holding cost)and provides an optimal production plan.
-
-    Option to use deterministic or probabilistc model.
-    """
     init_state()
     st.session_state.screen.show()
 
