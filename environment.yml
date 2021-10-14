@@ -3,14 +3,10 @@ channels:
   - conda-forge
 dependencies:
 - pip
-- streamlit
 - pydantic
-- pandas
-- altair
 - coverage
 - mypy
 - flake8
-- simpy
 - pymc3
 - pystan==2.19.1.1
 - prophet
@@ -18,8 +14,12 @@ dependencies:
 - mkl 
 - mkl-service
 - pip:
+  - streamlit
   - mip
   - ortools
   - graphviz
+  - simpy
+  - pandas
+  - altair
 
 
