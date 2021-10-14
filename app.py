@@ -3,7 +3,7 @@ import streamlit as st
 st.set_page_config(layout="wide")
 class EmptyScreen:
 
-    def show():
+    def show(self):
         st.markdown("Failed to Load")
 
 try:
