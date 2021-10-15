@@ -168,59 +168,8 @@ def get_example() -> Problem:
     return Problem(facilities, products, orders)
 
 def get_example_json():
-    s = """
-        {
-    "facilities":[
-        {
-            "name":"A",
-            "capacity":1,
-            "holding_cost":10,
-            "dependents":[
-                1
-            ]
-        },
-        {
-            "name":"B",
-            "capacity":2,
-            "holding_cost":100,
-            "dependents":[]
-        },
-        {
-            "name":"C",
-            "capacity":1,
-            "holding_cost":40,
-            "dependents":[]
-        }
-    ],
-    "products":[
-        {
-            "name":"One",
-            "dependencies":[
-                1,
-                2
-            ]
-        },
-        {
-            "name":"Two",
-            "dependencies":[
-                0,
-                2
-            ]
-        }
-    ],
-    "orders":[
-        {
-            "product_amounts":[1,2],
-            "deadline": 4
-        },
-        {
-            "product_amounts":[2,0],
-            "deadline": 5
-        }
-    ]
-}
-    """
-    return json.loads(s)
+    with open('planning_setup_small.json') as f:
+        return json.load(f)
 
 class MIPSolver:
 
@@ -235,7 +184,7 @@ class MIPSolver:
         P = [[m.add_var(name=f'P_{f.name}_{t}', var_type=INTEGER, lb=0, ub=f.capacity) for t in timesteps] for f in facilities]
 
         # Holding + Positive Constraint
-        H = [[m.add_var(name=f'H_{f.name}_{t}', var_type=INTEGER, lb=0) for t in range(problem.horizon+1)] for f in facilities]
+        H = [[m.add_var(name=f'H_{f.name}_{t}', var_type=INTEGER, lb=0) for t in range(problem.horizon + 1)] for f in facilities]
 
         # Holding Continuity
         for f_id, f in enumerate(facilities):
@@ -250,7 +199,7 @@ class MIPSolver:
         m.objective = xsum(f.holding_cost * H[f_id][t] for t in timesteps for f_id, f in enumerate(facilities))
         
         m.max_gap = 0.01
-        status = m.optimize(max_seconds=60)
+        status = m.optimize(max_seconds=300)
 
         schedules = []
         if status == OptimizationStatus.OPTIMAL or status == OptimizationStatus.FEASIBLE:
@@ -264,6 +213,9 @@ class MIPSolver:
             qual = "Optimal"
         elif status == OptimizationStatus.FEASIBLE:
             qual = "Feasible"
+        else:
+            qual= "INFEASIBLE"
+
         return Solution(schedules, qual, m.objective_value, problem)
 
 # ----------------------------------------------------- Displays ---------------------------------------------------------------------------
@@ -321,20 +273,27 @@ class Settings:
     def show(self):
         st.markdown("### Settings")
         st.button("Use Default", on_click=self.on_use_default)
+        st.button("Use Large Example", on_click=self.on_use_example_large)
         setup = self.get_setup()
         with st.expander("Show setup"):
             modified_setup = st.text_area(label="JSON Spec", value=json.dumps(setup, indent=4, sort_keys=True), height=500)
             st.button("Update Settings", on_click=self.on_update_settings, args=(modified_setup,))
 
     def on_use_default(self):
-        st.session_state.screen.use_default()
+        with open('planning_setup_small.json', 'r') as f:
+            st.session_state.screen.set_setup(json.load(f))
+
+    def on_use_example_large(self):
+        with open('planning_setup_large.json', 'r') as f:
+            st.session_state.screen.set_setup(json.load(f))
 
     def get_setup(self):
         return st.session_state.screen.get_setup()
 
     def on_update_settings(self, setup):
+        setup = json.loads(setup)
         try:
-            parse_json(setup)
+            parse_json(setup) # Test if Setup is valid
             st.session_state.screen.set_setup(setup)
         except Exception as e:
             st.write(f"Invalid Spec: {str(e)}")
@@ -343,7 +302,10 @@ class SolutionDisplay:
 
     def show(self):
         solution = self.get_solution()
-        problem = self.get_problem()
+        if solution.quality == "INFEASIBLE":
+            st.write("INFEASIBLE")
+            return ''
+
         sol_df = self.schedules_to_df(solution)
         prod_chart = self.generate_prod_chart(sol_df)
         hold_chart = self.generate_hold_chart(sol_df)
@@ -351,7 +313,6 @@ class SolutionDisplay:
         st.markdown(f"Optimized Cost {solution.cost}")
         st.altair_chart(prod_chart)
         st.altair_chart(hold_chart)
-
 
     def get_solution(self) -> Solution:
         return st.session_state.screen.get_solution()

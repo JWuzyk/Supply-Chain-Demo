@@ -1,10 +1,13 @@
 
 import streamlit as st
 st.set_page_config(layout="wide")
+
+
 class EmptyScreen:
 
     def show(self):
         st.markdown("Failed to Load")
+
 
 try:
     from scheduling_app import JobSchedulerScreen
@@ -44,12 +47,14 @@ screens = {
     "Simulation": QueueScreen
     }
 
+if "screen" not in st.session_state:
+    st.session_state.screen = JobSchedulerScreen()
+
 def change_screen():
     st.session_state.screen = screens[st.session_state.screen_choice]()
 
 st.sidebar.selectbox("Choose Application", options=screens.keys(), on_change=change_screen, key='screen_choice')
 
-if "screen" not in st.session_state:
-    st.session_state.screen = JobSchedulerScreen()
+
 
 st.session_state.screen.show()

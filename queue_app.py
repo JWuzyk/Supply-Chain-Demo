@@ -201,8 +201,8 @@ class Modeller:
         with arrival_model:
 
             # Priors for unknown model parameters
-            alpha = pm.HalfNormal("alpha", sigma=100)
-            scale = pm.HalfNormal("scale", sigma=100)
+            alpha = pm.HalfCauchy("alpha", beta=5)
+            scale = pm.HalfCauchy("scale", beta=5)
             beta = 1 / scale
 
             # Likelihood (sampling distribution) of observations

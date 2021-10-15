@@ -1,0 +1,50 @@
+{
+    "facilities":[
+        {
+            "name":"A",
+            "capacity":1,
+            "holding_cost":10,
+            "dependents":[
+                1
+            ]
+        },
+        {
+            "name":"B",
+            "capacity":2,
+            "holding_cost":100,
+            "dependents":[]
+        },
+        {
+            "name":"C",
+            "capacity":1,
+            "holding_cost":40,
+            "dependents":[]
+        }
+    ],
+    "products":[
+        {
+            "name":"One",
+            "dependencies":[
+                1,
+                2
+            ]
+        },
+        {
+            "name":"Two",
+            "dependencies":[
+                0,
+                2
+            ]
+        }
+    ],
+    "orders":[
+        {
+            "product_amounts":[1,2],
+            "deadline": 4
+        },
+        {
+            "product_amounts":[2,0],
+            "deadline": 5
+        }
+    ]
+}

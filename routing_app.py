@@ -13,7 +13,8 @@ from ortools.constraint_solver import pywrapcp
 from pydantic.dataclasses import dataclass
 from typing import List
 
-MAPQUEST_KEY = "TZt5RVTQrGVrcN4GW18QCGA5plt6h6No"
+with open('map_quest.txt') as f:
+    MAPQUEST_KEY = f.read()
 
 #------------------------------------------Variables------------------------------------------------------
 Coordinate = Tuple[float,float]  # latitude, longitude
