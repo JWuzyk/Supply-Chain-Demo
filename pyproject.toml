@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "supply-chain"
+version = "0.1.0"
+description = ""
+authors = ["JWuzyk <jan.wuzyk@gmail.com>"]
+readme = "README.md"
+packages = [{include = "supply_chain"}]
+
+[tool.poetry.dependencies]
+python = "^3.10,<3.11"
+pydantic = "^2.2.0"
+coverage = "^7.3.0"
+mypy = "^1.5.1"
+flake8 = "^6.1.0"
+pymc3 = "^3.11.5"
+streamlit = "^1.25.0"
+mip = "^1.15.0"
+ortools = "^9.7.2996"
+graphviz = "^0.20.1"
+simpy = "^4.0.2"
+pandas = "^2.0.3"
+altair = "^5.0.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
